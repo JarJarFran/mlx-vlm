@@ -1234,7 +1234,8 @@ def _mtp_rounds(
 
             if grammar is not None:
                 grammar.accept([new_tokens])
-            verify.commit(lm, prompt_cache, accepted, bs)
+            with mx.stream(generation_stream):
+                verify.commit(lm, prompt_cache, accepted, bs)
         except BaseException:
             if verify is not None:
                 verify.abort()
@@ -1655,7 +1656,8 @@ def _mtp_rounds_batch(
 
             if grammar is not None:
                 grammar.accept(new_tokens_list, rows=active_idx, skip=finished)
-            verify.commit(lm, prompt_cache, accepted_list, bs)
+            with mx.stream(generation_stream):
+                verify.commit(lm, prompt_cache, accepted_list, bs)
         except BaseException:
             if verify is not None:
                 verify.abort()
